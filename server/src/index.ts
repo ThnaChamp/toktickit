@@ -14,6 +14,9 @@ const prisma = new PrismaClient({ adapter });
 const app = express();
 const PORT = 3000; // Define Port run Server
 
+export { app };
+export default app;
+
 app.use(cors({
   origin: 'http://localhost:5173',
 }))
