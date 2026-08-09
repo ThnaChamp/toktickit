@@ -9,8 +9,10 @@ function App() {
 
   const checkSystem = async () => {
     try {
-      setStatus("Loading...");
+      setLoading(true);
+      setStatus("");
       setError("");
+      setCategories([]);
 
       const healthRes = await fetch("http://localhost:3000/api/health");
       if (!healthRes.ok) throw new Error("Unable to connect to TokTickIT API");

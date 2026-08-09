@@ -17,5 +17,10 @@ describe('GET /api/categories', () => {
         name: expect.any(String),
       })
     );
+
+    expect(res.body.map((c: { name: string }) => c.name)).toEqual([
+      'Account and Access', 'Hardware', 'Software', 'Network'
+    ]);
+
   });
 });
