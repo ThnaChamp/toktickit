@@ -97,11 +97,11 @@
 
 ---
 
-### PR B — [partner's feature branch] → lab1-staging
+### PR B — [feature/4-category-list] → lab1-staging
 
 | Field | Detail |
 |-------|--------|
-| **PR Link** | [https://github.com/partner-repo/pull/XX](https://github.com/partner-repo/pull/XX) |
-| **My Review Comment** | "[Paste the actual comment you left on your partner's PR]" |
-| **Partner's Response** | "[Describe how your partner responded to your review]" |
+| **PR Link** | [https://github.com/JeffMerry/toktickit/pull/8](https://github.com/JeffMerry/toktickit/pull/8) |
+| **My Review Comment** | "[Could you please upload the test results for both the frontend and the backend?]" |
+| **Partner's Response** | "[Added test result]" |
 | **Outcome** | Approved and merged |
