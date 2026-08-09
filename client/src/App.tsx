@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h2>Tok TickIT IT Service Desk</h2>
+      <h2>TokTickIT IT Service Desk</h2>
 
       <button className="btn btn-primary my-3" onClick={checkSystem}>
         [Check System]
