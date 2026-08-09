@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { app } from '../../src/index.js';
+import app from '../../src/index.js';
 
 describe('GET /api/categories', () => {
   it('returns categories from the database', async () => {
