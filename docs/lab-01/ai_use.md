@@ -1,7 +1,7 @@
 # Lab 1 AI Use and Reflection
 
-I used the **Antigravity** coding agent through my Google Cloud Platform account.  
-I mainly used **Claude Sonnet 4.6 (Thinking)** as the LLM with a thinking level of **Medium**.
+ในการทำงานครั้งนี้ ผมได้ใช้งาน **Antigravity** AI Coding Agent ผ่านบัญชี Google Cloud Platform  
+โดยเลือกใช้โมเดลหลักคือ **Claude Sonnet 4.6 (Thinking)** และ **Gemini 3.6 Flash** 
 
 ---
 
