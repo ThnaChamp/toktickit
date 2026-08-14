@@ -6,7 +6,7 @@
 |-------|--------|
 | **Name** | [Thanatip Nitinantakul] |
 | **Student ID** | [67070501023] |
-| **GitHub Username** | [@ThnaChamp](https://github.com/ThnaChamp) |
+| **GitHub Username** | [ThnaChamp](https://github.com/ThnaChamp) |
 
 ---
 
@@ -38,8 +38,8 @@
 
 | Field | Detail |
 |-------|--------|
-| **PR Link** | https://github.com/ThnaChamp/toktickit/pull/5 |
-| **Reviewer** | [Natthawat Primsirikunawut] |
+| **PR Link** | [https://github.com/ThnaChamp/toktickit/pull/5](https://github.com/ThnaChamp/toktickit/pull/5) |
+| **Reviewer** | Natthawat Primsirikunawut ([@N0TAW00D](https://github.com/N0TAW00D)) |
 | **Review Comment** | "[You have done a great setup. NIT you haven't put env.example up here.]" |
 | **My Response** | Added `.env.example` to the repository. |
 | **Outcome** | Approved and merged |   
