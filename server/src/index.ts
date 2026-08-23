@@ -1,5 +1,5 @@
 import express, { type Request, type Response } from 'express';
-import cors from 'cors'
+import cors from 'cors';
 import "dotenv/config";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -10,42 +10,71 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// Create App Express
 const app = express();
-const PORT = 3000; // Define Port run Server
+const PORT = 3000;
 
 export { app };
 export default app;
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-}))
+app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(express.json());
 
-// Create Endpoint GET /api/health
-app.get('/api/health', (req: Request, res: Response) => {
-    res.status(200).json({
-        status: "ok",
-        service: "TokTickIT API"
-    });
+// ─── Health ───────────────────────────────────────────────────────────────────
+
+app.get('/api/health', (_req: Request, res: Response) => {
+  res.status(200).json({ success: true, status: 'ok', service: 'TokTickIT API' });
 });
 
-app.get('/api/categories', async (req: Request, res: Response) => {
+// ─── GET /api/requesters — active Development Requesters only (BR-04) ─────────
+
+app.get('/api/requesters', async (_req: Request, res: Response) => {
+  try {
+    const requesters = await prisma.requesterUser.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true, email: true },
+    });
+    res.status(200).json({ success: true, data: requesters });
+  } catch {
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Unable to fetch requesters.' },
+    });
+  }
+});
+
+// ─── GET /api/categories — active categories only ─────────────────────────────
+
+app.get('/api/categories', async (_req: Request, res: Response) => {
   try {
     const categories = await prisma.category.findMany({
-      orderBy: {
-        id: 'asc',
-      },
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true },
     });
-
-    const response = categories.map((category) => ({
-      id: category.id,
-      name: category.name,
-    }));
-
-    res.status(200).json(response);
-  } catch (error) {
+    res.status(200).json({ success: true, data: categories });
+  } catch {
     res.status(500).json({
-      error: 'Failed to fetch categories',
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Unable to fetch categories.' },
+    });
+  }
+});
+
+// ─── GET /api/related-systems — active related systems only ───────────────────
+
+app.get('/api/related-systems', async (_req: Request, res: Response) => {
+  try {
+    const systems = await prisma.relatedSystem.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true },
+    });
+    res.status(200).json({ success: true, data: systems });
+  } catch {
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Unable to fetch related systems.' },
     });
   }
 });
