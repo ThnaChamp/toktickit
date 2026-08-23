@@ -1,64 +1,56 @@
-import { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { RequesterProvider, useRequester } from "./contexts/RequesterContext";
+import NavBar from "./components/NavBar";
+import RequesterSelectionPage from "./pages/RequesterSelectionPage";
+import PlaceholderPage from "./pages/PlaceholderPage";
 
-function App() {
-  const [status, setStatus] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [categories, setCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+// ─── Guard: redirect to /select-requester if no requester selected (FR-14) ───
 
-  const checkSystem = async () => {
-    try {
-      setLoading(true);
-      setStatus("");
-      setError("");
-      setCategories([]);
+function GuardedRoute({ children }: { children: React.ReactNode }) {
+  const { requester } = useRequester();
+  if (!requester) return <Navigate to="/select-requester" replace />;
+  return <>{children}</>;
+}
 
-      const healthRes = await fetch("http://localhost:3000/api/health");
-      if (!healthRes.ok) throw new Error("Unable to connect to TokTickIT API");
+// ─── App shell layout ─────────────────────────────────────────────────────────
 
-      const categoriesRes = await fetch("http://localhost:3000/api/categories");
-      if (!categoriesRes.ok) throw new Error("Unable to load categories");
-
-      const healthData = await healthRes.json();
-      const categoriesData = await categoriesRes.json();
-
-      setStatus(`System Status: Online (${healthData.service})`);
-      setCategories(categoriesData.map((c: { name: string }) => c.name));
-    } catch (err) {
-      setStatus("");
-      setError("System Status: Offline - Unable to connect to TokTickIT API");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+function AppShell() {
   return (
-    <div className="container mt-5">
-      <h2>TokTickIT IT Service Desk</h2>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F5F7F6" }}>
+      <NavBar />
+      <main className="flex-1">
+        <Routes>
+          {/* Default redirect */}
+          <Route path="/" element={<Navigate to="/my-tickets" replace />} />
 
-      <button className="btn btn-primary my-3" onClick={checkSystem}>
-        [Check System]
-      </button>
+          {/* Requester selection — no guard needed */}
+          <Route path="/select-requester" element={<RequesterSelectionPage />} />
 
-      {loading && <div className="alert alert-info">Loading...</div>}
-
-      {status && <div className="alert alert-success">{status}</div>}
-
-      {error && <div className="alert alert-danger">{error}</div>}
-
-      {!loading && categories.length > 0 && (
-        <div>
-          <h4>Supported Request Categories</h4>
-          <ul>
-            {categories.map((category) => (
-              <li key={category}>{category}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+          {/* Guarded routes */}
+          <Route path="/my-tickets" element={
+            <GuardedRoute>
+              <PlaceholderPage title="My Tickets" />
+            </GuardedRoute>
+          } />
+          <Route path="/create-ticket" element={
+            <GuardedRoute>
+              <PlaceholderPage title="Create Ticket" />
+            </GuardedRoute>
+          } />
+        </Routes>
+      </main>
     </div>
   );
 }
 
-export default App;
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <RequesterProvider>
+        <AppShell />
+      </RequesterProvider>
+    </BrowserRouter>
+  );
+}
