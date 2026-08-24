@@ -39,8 +39,8 @@
 
 | Test ID | Type | Req / AC | What It Tests | Expected Result | Test File | Final |
 |---------|------|----------|---------------|-----------------|-----------|-------|
-| UNIT-01 | Unit | BR-01 | Ticket Number generator returns `TKT-{YEAR}-{6-digit zero-padded}` format | Correct format string | `server/tests/lab-02/ticket-number.unit.test.ts` | |
-| UNIT-02 | Unit | BR-01 | Ticket Number generator pads sequence to 6 digits | `TKT-2026-000001` for seq=1 | `server/tests/lab-02/ticket-number.unit.test.ts` | |
+| UNIT-01 | Unit | BR-01 | Ticket Number generator returns `TKT-{YEAR}-{6-digit zero-padded}` format | Correct format string | `server/tests/lab-02/ticket-number.unit.test.ts` | PASS |
+| UNIT-02 | Unit | BR-01 | Ticket Number generator pads sequence to 6 digits | `TKT-2026-000001` for seq=1 | `server/tests/lab-02/ticket-number.unit.test.ts` | PASS |
 | UNIT-03 | Unit | BR-07 | Summary trimming removes leading/trailing whitespace | `"  hello  "` → `"hello"` | `server/tests/lab-02/validation.unit.test.ts` | |
 | UNIT-04 | Unit | BR-07 | Summary validation rejects < 5 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
 | UNIT-05 | Unit | BR-07 | Summary validation rejects > 200 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
@@ -53,14 +53,14 @@
 
 | Test ID | Type | Req / AC | What It Tests | Expected Result | Test File | Final |
 |---------|------|----------|---------------|-----------------|-----------|-------|
-| API-01 | API | AC-01 | POST `/api/tickets` with valid data | 201; one Ticket saved; `ticketNumber` returned; `requesterId` matches | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-02 | API | AC-05, BR-07 | POST `/api/tickets` with empty summary | 400; `details[].field === "summary"` | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-03 | API | AC-05, BR-07 | POST `/api/tickets` with summary < 5 chars | 400; field-level error for `summary` | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-04 | API | BR-08 | POST `/api/tickets` with description < 10 chars | 400; field-level error for `description` | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-05 | API | BR-09 | POST `/api/tickets` with invalid `categoryId` | 400; `INVALID_CATEGORY` error | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-06 | API | BR-11 | POST `/api/tickets` with invalid `requestedPriority` | 400; validation error | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-07 | API | BR-02 | POST `/api/tickets` — new ticket has `currentStatus = NEW` | Response contains `"currentStatus": "NEW"` | `server/tests/lab-02/create-ticket.api.test.ts` | |
-| API-08 | API | BR-12 | POST `/api/tickets` — `itPriority` equals `requestedPriority` | `itPriority === requestedPriority` in response | `server/tests/lab-02/create-ticket.api.test.ts` | |
+| API-01 | API | AC-01 | POST `/api/tickets` with valid data | 201; one Ticket saved; `ticketNumber` returned; `requesterId` matches | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-02 | API | AC-05, BR-07 | POST `/api/tickets` with empty summary | 400; `details[].field === "summary"` | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-03 | API | AC-05, BR-07 | POST `/api/tickets` with summary < 5 chars | 400; field-level error for `summary` | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-04 | API | BR-08 | POST `/api/tickets` with description < 10 chars | 400; field-level error for `description` | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-05 | API | BR-09 | POST `/api/tickets` with invalid `categoryId` | 400; `INVALID_CATEGORY` error | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-06 | API | BR-11 | POST `/api/tickets` with invalid `requestedPriority` | 400; validation error | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-07 | API | BR-02 | POST `/api/tickets` — new ticket has `currentStatus = NEW` | Response contains `"currentStatus": "NEW"` | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
+| API-08 | API | BR-12 | POST `/api/tickets` — `itPriority` equals `requestedPriority` | `itPriority === requestedPriority` in response | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
 | API-09 | API | AC-09, BR-06 | GET `/api/tickets` — only returns tickets belonging to `requesterId` | Other requesters' tickets absent | `server/tests/lab-02/my-tickets.api.test.ts` | |
 | API-10 | API | AC-10, BR-26 | GET `/api/tickets?search=laptop` | Only matching tickets returned; case-insensitive | `server/tests/lab-02/my-tickets.api.test.ts` | |
 | API-11 | API | AC-11 | GET `/api/tickets?category=Hardware` | Only Hardware tickets returned | `server/tests/lab-02/my-tickets.api.test.ts` | |
@@ -79,29 +79,29 @@
 | API-24 | API | AC-20, BR-19 | DELETE `/api/attachments/:id` with valid reason | 200; `removedAt` set; `removalReason` stored | `server/tests/lab-02/attachments.api.test.ts` | |
 | API-25 | API | BR-19 | DELETE attachment without `removalReason` | 400 `VALIDATION_ERROR` | `server/tests/lab-02/attachments.api.test.ts` | |
 | API-26 | API | — | DELETE already-removed attachment | 409 `ALREADY_REMOVED` | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-27 | API | BR-04 | GET `/api/requesters` — inactive Requester is absent | Inactive Requester not in response | `server/tests/lab-02/requesters.api.test.ts` | |
+| API-27 | API | BR-04 | GET `/api/requesters` — inactive Requester is absent | Inactive Requester not in response | `server/tests/lab-02/requesters.api.test.ts` | PASS |
 
 ### 2.3 UI Component Tests
 
 | Test ID | Type | Req / AC | What It Tests | Expected Result | Test File | Final |
 |---------|------|----------|---------------|-----------------|-----------|-------|
-| UI-01 | UI | AC-05 | CreateTicket: submit with empty Summary | Field error below Summary; API not called | `client/src/.../CreateTicket.test.tsx` | |
-| UI-02 | UI | AC-06 | CreateTicket: select file > 5 MB | Per-file error shown; file not in valid list | `client/src/.../CreateTicket.test.tsx` | |
-| UI-03 | UI | AC-07 | CreateTicket: select unsupported file type | Per-file error shown; file not in valid list | `client/src/.../CreateTicket.test.tsx` | |
-| UI-04 | UI | BR-14 | CreateTicket: Submit button shows busy state during submission | Button text changes; button disabled | `client/src/.../CreateTicket.test.tsx` | |
-| UI-05 | UI | AC-08 | CreateTicket: API failure preserves form values | All field values intact after error | `client/src/.../CreateTicket.test.tsx` | |
-| UI-06 | UI | AC-01 | CreateTicket: success state shows Ticket Number | Ticket Number displayed prominently | `client/src/.../CreateTicket.test.tsx` | |
-| UI-07 | UI | FR-14 | MyTickets: no Requester selected redirects to Selection screen | Redirect to `/select-requester` | `client/src/.../MyTickets.test.tsx` | |
-| UI-08 | UI | AC-14 | MyTickets: empty state when no tickets exist | Empty-state component rendered (not error) | `client/src/.../MyTickets.test.tsx` | |
-| UI-09 | UI | AC-15 | MyTickets: no-results state after search | No-results component rendered | `client/src/.../MyTickets.test.tsx` | |
-| UI-10 | UI | — | MyTickets: Clear Filters appears only when filter active | Not visible initially; visible after filter set | `client/src/.../MyTickets.test.tsx` | |
-| UI-11 | UI | AC-16 | TicketDetail: all header fields render as read-only | No editable inputs in header | `client/src/.../RequesterTicketDetail.test.tsx` | |
-| UI-12 | UI | BR-20 | AttachmentSection: removed attachment has no Download button | Download button absent for removed items | `client/src/.../AttachmentSection.test.tsx` | |
-| UI-13 | UI | BR-18 | AttachmentSection: Add Attachment disabled at limit | Button disabled; tooltip visible | `client/src/.../AttachmentSection.test.tsx` | |
-| UI-14 | UI | — | RequiredField: red asterisk present on all required fields | `*` visible for Summary, Description, Category, etc. | `client/src/.../CreateTicket.test.tsx` | |
-| UI-15 | UI | AC-02 | Dev Requester Selector: loading state shown during fetch | Spinner/skeleton visible | `client/src/.../DevRequesterSelector.test.tsx` | |
-| UI-16 | UI | AC-24 | Dev Requester Selector: error state with Retry button | Error message + Retry button rendered | `client/src/.../DevRequesterSelector.test.tsx` | |
-| UI-17 | UI | AC-25 | Dev Requester Selector: empty state when no active requesters | Empty state rendered (not error) | `client/src/.../DevRequesterSelector.test.tsx` | |
+| UI-01 | UI | AC-05 | CreateTicket: submit with empty Summary | Field error below Summary; API not called | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
+| UI-02 | UI | AC-06 | CreateTicket: select file > 5 MB | Per-file error shown; file not in valid list | `client/tests/lab-02/AttachmentSection.test.tsx` | |
+| UI-03 | UI | AC-07 | CreateTicket: select unsupported file type | Per-file error shown; file not in valid list | `client/tests/lab-02/AttachmentSection.test.tsx` | |
+| UI-04 | UI | BR-14 | CreateTicket: Submit button shows busy state during submission | Button text changes; button disabled | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
+| UI-05 | UI | AC-08 | CreateTicket: API failure preserves form values | All field values intact after error | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
+| UI-06 | UI | AC-01 | CreateTicket: success state shows Ticket Number | Ticket Number displayed prominently | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
+| UI-07 | UI | FR-14 | Route Guard: no Requester selected redirects to Selection screen | Redirect to `/select-requester` | `client/src/App.test.tsx` | PASS |
+| UI-08 | UI | AC-14 | MyTickets: empty state when no tickets exist | Empty-state component rendered (not error) | `client/tests/lab-02/MyTickets.test.tsx` | |
+| UI-09 | UI | AC-15 | MyTickets: no-results state after search | No-results component rendered | `client/tests/lab-02/MyTickets.test.tsx` | |
+| UI-10 | UI | — | MyTickets: Clear Filters appears only when filter active | Not visible initially; visible after filter set | `client/tests/lab-02/MyTickets.test.tsx` | |
+| UI-11 | UI | AC-16 | TicketDetail: all header fields render as read-only | No editable inputs in header | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | |
+| UI-12 | UI | BR-20 | AttachmentSection: removed attachment has no Download button | Download button absent for removed items | `client/tests/lab-02/AttachmentSection.test.tsx` | |
+| UI-13 | UI | BR-18 | AttachmentSection: Add Attachment disabled at limit | Button disabled; tooltip visible | `client/tests/lab-02/AttachmentSection.test.tsx` | |
+| UI-14 | UI | — | RequiredField: red asterisk present on all required fields | `*` visible for Summary, Description, Category, etc. | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
+| UI-15 | UI | AC-02 | Dev Requester Selector: loading state shown during fetch | Spinner/skeleton visible | `client/tests/lab-02/DevRequesterSelector.test.tsx` | PASS |
+| UI-16 | UI | AC-24 | Dev Requester Selector: error state with Retry button | Error message + Retry button rendered | `client/tests/lab-02/DevRequesterSelector.test.tsx` | PASS |
+| UI-17 | UI | AC-25 | Dev Requester Selector: empty state when no active requesters | Empty state rendered (not error) | `client/tests/lab-02/DevRequesterSelector.test.tsx` | PASS |
 
 ### 2.4 E2E Tests
 
@@ -218,15 +218,28 @@ npm run test:lab-02
 
 ## 6. Final Results
 
-> To be filled in after implementation is complete.
-
 | Test ID | Final Status | Notes |
 |---------|-------------|-------|
-| UNIT-01 | | |
-| UNIT-02 | | |
-| … | | |
-| E2E-07 | | |
-| VIS-05 | | |
+| UNIT-01 | PASS | Ticket number format `TKT-YYYY-XXXXXX` verified |
+| UNIT-02 | PASS | 6-digit zero-padding and sequence increment verified |
+| API-01 | PASS | Valid ticket creation returns 201 Created and ticketNumber |
+| API-02 | PASS | Empty summary returns 400 with VALIDATION_ERROR |
+| API-03 | PASS | Short summary (< 5 chars) returns 400 Bad Request |
+| API-04 | PASS | Short description (< 10 chars) returns 400 Bad Request |
+| API-05 | PASS | Non-existent categoryId returns 400 Bad Request |
+| API-06 | PASS | Invalid priority enum returns 400 Bad Request |
+| API-07 | PASS | Initial currentStatus correctly defaults to `NEW` |
+| API-08 | PASS | itPriority correctly defaults to requestedPriority |
+| API-27 | PASS | GET /api/requesters returns only active requesters (Alex Turner excluded) |
+| UI-01 | PASS | CreateTicket empty summary shows error and blocks API submission |
+| UI-04 | PASS | CreateTicket submit button shows busy state and is disabled |
+| UI-05 | PASS | CreateTicket preserves form input values on API error |
+| UI-06 | PASS | CreateTicket displays success screen with official Ticket Number |
+| UI-07 | PASS | Route guard redirects to /select-requester when session is empty |
+| UI-14 | PASS | Required asterisks (*) present on all mandatory form fields |
+| UI-15 | PASS | Dev requester selector shows loading indicator during fetch |
+| UI-16 | PASS | Dev requester selector shows error banner with working Retry button |
+| UI-17 | PASS | Dev requester selector shows empty state when no active requesters |
 
 ---
 

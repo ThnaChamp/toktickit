@@ -7,20 +7,20 @@ describe('GET /api/categories', () => {
     const res = await request(app).get('/api/categories');
 
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
 
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body.data.length).toBeGreaterThan(0);
 
-    expect(res.body[0]).toEqual(
+    expect(res.body.data[0]).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
         name: expect.any(String),
       })
     );
 
-    expect(res.body.map((c: { name: string }) => c.name)).toEqual([
-      'Account and Access', 'Hardware', 'Software', 'Network'
+    expect(res.body.data.map((c: { name: string }) => c.name)).toEqual([
+      'Account and Access', 'Hardware', 'Network', 'Software'
     ]);
-
   });
 });
