@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { RequesterProvider, useRequester } from "./contexts/RequesterContext";
 import NavBar from "./components/NavBar";
 import RequesterSelectionPage from "./pages/RequesterSelectionPage";
+import CreateTicketPage from "./pages/CreateTicketPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
 // ─── Guard: redirect to /select-requester if no requester selected (FR-14) ───
@@ -34,7 +35,7 @@ function AppShell() {
           } />
           <Route path="/create-ticket" element={
             <GuardedRoute>
-              <PlaceholderPage title="Create Ticket" />
+              <CreateTicketPage />
             </GuardedRoute>
           } />
         </Routes>
