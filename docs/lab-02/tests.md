@@ -61,12 +61,12 @@
 | API-06 | API | BR-11 | POST `/api/tickets` with invalid `requestedPriority` | 400; validation error | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
 | API-07 | API | BR-02 | POST `/api/tickets` — new ticket has `currentStatus = NEW` | Response contains `"currentStatus": "NEW"` | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
 | API-08 | API | BR-12 | POST `/api/tickets` — `itPriority` equals `requestedPriority` | `itPriority === requestedPriority` in response | `server/tests/lab-02/create-ticket.api.test.ts` | PASS |
-| API-09 | API | AC-09, BR-06 | GET `/api/tickets` — only returns tickets belonging to `requesterId` | Other requesters' tickets absent | `server/tests/lab-02/my-tickets.api.test.ts` | |
-| API-10 | API | AC-10, BR-26 | GET `/api/tickets?search=laptop` | Only matching tickets returned; case-insensitive | `server/tests/lab-02/my-tickets.api.test.ts` | |
-| API-11 | API | AC-11 | GET `/api/tickets?category=Hardware` | Only Hardware tickets returned | `server/tests/lab-02/my-tickets.api.test.ts` | |
-| API-12 | API | AC-12, BR-23 | GET `/api/tickets` default sort | Ordered by `createdAt DESC` | `server/tests/lab-02/my-tickets.api.test.ts` | |
-| API-13 | API | AC-13, BR-24 | GET `/api/tickets?page=2&pageSize=10` | Correct page of 10 tickets; accurate pagination metadata | `server/tests/lab-02/my-tickets.api.test.ts` | |
-| API-14 | API | BR-25 | GET `/api/tickets?pageSize=99` | 400; `INVALID_PAGE_SIZE` | `server/tests/lab-02/my-tickets.api.test.ts` | |
+| API-09 | API | AC-09, BR-06 | GET `/api/tickets` — only returns tickets belonging to `requesterId` | Other requesters' tickets absent | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
+| API-10 | API | AC-10, BR-26 | GET `/api/tickets?search=laptop` | Only matching tickets returned; case-insensitive | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
+| API-11 | API | AC-11 | GET `/api/tickets?category=Hardware` | Only Hardware tickets returned | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
+| API-12 | API | AC-12, BR-23 | GET `/api/tickets` default sort | Ordered by `createdAt DESC` | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
+| API-13 | API | AC-13, BR-24 | GET `/api/tickets?page=2&pageSize=10` | Correct page of 10 tickets; accurate pagination metadata | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
+| API-14 | API | BR-25 | GET `/api/tickets?pageSize=99` | 400; `INVALID_PAGE_SIZE` | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
 | API-15 | API | AC-03, BR-06 | GET `/api/tickets/:ticketNumber` with wrong `requesterId` | 403 `FORBIDDEN` | `server/tests/lab-02/ticket-detail.api.test.ts` | |
 | API-16 | API | AC-16 | GET `/api/tickets/:ticketNumber` with correct `requesterId` | 200; full ticket including attachments | `server/tests/lab-02/ticket-detail.api.test.ts` | |
 | API-17 | API | — | GET `/api/tickets/TKT-0000-NOTEXIST` | 404 `NOT_FOUND` | `server/tests/lab-02/ticket-detail.api.test.ts` | |
@@ -92,9 +92,9 @@
 | UI-05 | UI | AC-08 | CreateTicket: API failure preserves form values | All field values intact after error | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
 | UI-06 | UI | AC-01 | CreateTicket: success state shows Ticket Number | Ticket Number displayed prominently | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
 | UI-07 | UI | FR-14 | Route Guard: no Requester selected redirects to Selection screen | Redirect to `/select-requester` | `client/src/App.test.tsx` | PASS |
-| UI-08 | UI | AC-14 | MyTickets: empty state when no tickets exist | Empty-state component rendered (not error) | `client/tests/lab-02/MyTickets.test.tsx` | |
-| UI-09 | UI | AC-15 | MyTickets: no-results state after search | No-results component rendered | `client/tests/lab-02/MyTickets.test.tsx` | |
-| UI-10 | UI | — | MyTickets: Clear Filters appears only when filter active | Not visible initially; visible after filter set | `client/tests/lab-02/MyTickets.test.tsx` | |
+| UI-08 | UI | AC-14 | MyTickets: empty state when no tickets exist | Empty-state component rendered (not error) | `client/tests/lab-02/MyTickets.test.tsx` | PASS |
+| UI-09 | UI | AC-15 | MyTickets: no-results state after search | No-results component rendered | `client/tests/lab-02/MyTickets.test.tsx` | PASS |
+| UI-10 | UI | — | MyTickets: Clear Filters appears only when filter active | Not visible initially; visible after filter set | `client/tests/lab-02/MyTickets.test.tsx` | PASS |
 | UI-11 | UI | AC-16 | TicketDetail: all header fields render as read-only | No editable inputs in header | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | |
 | UI-12 | UI | BR-20 | AttachmentSection: removed attachment has no Download button | Download button absent for removed items | `client/tests/lab-02/AttachmentSection.test.tsx` | |
 | UI-13 | UI | BR-18 | AttachmentSection: Add Attachment disabled at limit | Button disabled; tooltip visible | `client/tests/lab-02/AttachmentSection.test.tsx` | |
@@ -240,6 +240,15 @@ npm run test:lab-02
 | UI-15 | PASS | Dev requester selector shows loading indicator during fetch |
 | UI-16 | PASS | Dev requester selector shows error banner with working Retry button |
 | UI-17 | PASS | Dev requester selector shows empty state when no active requesters |
+| API-09 | PASS | GET /api/tickets strictly enforces requester ownership (Requester B tickets absent) |
+| API-10 | PASS | GET /api/tickets filters correctly by search query (case-insensitive) |
+| API-11 | PASS | GET /api/tickets filters correctly by category name |
+| API-12 | PASS | GET /api/tickets sorts by createdAt DESC by default |
+| API-13 | PASS | GET /api/tickets returns valid pagination structure and metadata |
+| API-14 | PASS | GET /api/tickets returns 400 INVALID_PAGE_SIZE for invalid pageSize |
+| UI-08 | PASS | MyTickets displays friendly empty state when user has 0 tickets |
+| UI-09 | PASS | MyTickets displays no-results state when search/filters match 0 tickets |
+| UI-10 | PASS | MyTickets Clear Filters button appears only when filters are active |
 
 ---
 

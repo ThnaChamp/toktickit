@@ -4,7 +4,6 @@ import NavBar from "./components/NavBar";
 import RequesterSelectionPage from "./pages/RequesterSelectionPage";
 import CreateTicketPage from "./pages/CreateTicketPage";
 import MyTicketsPage from "./pages/MyTicketsPage";
-import PlaceholderPage from "./pages/PlaceholderPage";
 
 // ─── Guard: redirect to /select-requester if no requester selected (FR-14) ───
 
