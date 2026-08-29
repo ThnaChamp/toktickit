@@ -10,7 +10,7 @@ export async function generateTicketNumber(prisma: any): Promise<string> {
       },
     },
     orderBy: {
-      id: "desc",
+      ticketNumber: "desc",
     },
   });
   let nextSeq = 1;
