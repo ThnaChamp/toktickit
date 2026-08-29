@@ -153,35 +153,188 @@ app.post('/api/tickets', async (req: Request, res: Response) => {
         },
       });
     }
-    // --- บันทึกลง Database ---
-    // สร้าง Ticket Number ใหม่
-    const ticketNumber = await generateTicketNumber(prisma);
-    const newTicket = await prisma.ticket.create({
-      data: {
-        ticketNumber,
-        requesterId: Number(requesterId),
-        categoryId: Number(categoryId),
-        relatedSystemId: Number(relatedSystemId),
-        requestedPriority,
-        itPriority: requestedPriority, // BR-12: เริ่มต้นให้เท่ากับ requestedPriority
-        currentStatus: 'NEW',          // BR-02: เริ่มต้นที่ NEW
-        summary: trimmedSummary,
-        description: trimmedDescription,
-      },
-      include: {
-        category: { select: { id: true, name: true } },
-        relatedSystem: { select: { id: true, name: true } },
-      },
-    });
+    // --- บันทึกลง Database (พร้อม Retry ป้องกัน Concurrency Race Condition) ---
+    let newTicket;
+    let attempts = 0;
+    while (attempts < 5) {
+      try {
+        const ticketNumber = await generateTicketNumber(prisma);
+        newTicket = await prisma.ticket.create({
+          data: {
+            ticketNumber,
+            requesterId: Number(requesterId),
+            categoryId: Number(categoryId),
+            relatedSystemId: Number(relatedSystemId),
+            requestedPriority,
+            itPriority: requestedPriority, // BR-12: เริ่มต้นให้เท่ากับ requestedPriority
+            currentStatus: 'NEW',          // BR-02: เริ่มต้นที่ NEW
+            summary: trimmedSummary,
+            description: trimmedDescription,
+          },
+          include: {
+            category: { select: { id: true, name: true } },
+            relatedSystem: { select: { id: true, name: true } },
+          },
+        });
+        break;
+      } catch (err: any) {
+        if (err?.code === 'P2002' && attempts < 4) {
+          attempts++;
+          continue;
+        }
+        throw err;
+      }
+    }
+
     // ส่ง Response 201 Created กลับไป
     return res.status(201).json({
       success: true,
       data: newTicket,
     });
-  } catch (error) {
+  } catch {
     return res.status(500).json({
       success: false,
       error: { code: 'SERVER_ERROR', message: 'Unable to create ticket.' },
+    });
+  }
+});
+
+// ─── GET /api/tickets — My Tickets (Ownership + Search + Filter + Sort + Pagination) ───
+app.get('/api/tickets', async (req: Request, res: Response) => {
+  try {
+    const {
+      requesterId,
+      search,
+      category,
+      requestedPriority,
+      itPriority,
+      status,
+      sort = 'createdAt',
+      order = 'desc',
+      page = '1',
+      pageSize = '10',
+    } = req.query;
+
+    // 1. ตรวจสอบ requesterId (BR-06: Ownership check)
+    if (!requesterId) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'MISSING_REQUESTER', message: 'requesterId is required.' },
+      });
+    }
+
+    const requester = await prisma.requesterUser.findUnique({
+      where: { id: Number(requesterId), isActive: true },
+    });
+    if (!requester) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_REQUESTER', message: 'Active requester not found.' },
+      });
+    }
+
+    // 2. ตรวจสอบ Pagination parameters (BR-24, BR-25)
+    const pageNum = parseInt(page as string, 10);
+    const sizeNum = parseInt(pageSize as string, 10);
+    if (isNaN(pageNum) || pageNum < 1) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PAGE', message: 'page must be a positive integer.' },
+      });
+    }
+    if (![10, 25, 50].includes(sizeNum)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PAGE_SIZE', message: 'pageSize must be 10, 25, or 50.' },
+      });
+    }
+
+    // 3. ตรวจสอบ Sorting parameters
+    const allowedSortFields = ['ticketNumber', 'createdAt', 'updatedAt'];
+    if (!allowedSortFields.includes(sort as string)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_SORT', message: 'Invalid sort field.' },
+      });
+    }
+    const sortOrder = (order as string).toLowerCase();
+    if (!['asc', 'desc'].includes(sortOrder)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_ORDER', message: 'order must be asc or desc.' },
+      });
+    }
+
+    // 4. ประกอบเงื่อนไข Where Query (Prisma)
+    const where: any = {
+      requesterId: Number(requesterId), // 👈 ล็อกสิทธิ์เฉพาะของ Requester คนนี้เท่านั้น
+    };
+
+    // ค้นหาข้อความ (BR-26: summary หรือ ticketNumber แบบ Case-insensitive)
+    if (search && typeof search === 'string' && search.trim() !== '') {
+      const searchTerm = search.trim();
+      where.OR = [
+        { summary: { contains: searchTerm, mode: 'insensitive' } },
+        { ticketNumber: { contains: searchTerm, mode: 'insensitive' } },
+      ];
+    }
+
+    // Filter ตาม Category
+    if (category && typeof category === 'string') {
+      where.category = { name: category };
+    }
+
+    // Filter ตาม Requested Priority
+    if (requestedPriority && typeof requestedPriority === 'string') {
+      where.requestedPriority = requestedPriority;
+    }
+
+    // Filter ตาม IT Priority
+    if (itPriority && typeof itPriority === 'string') {
+      where.itPriority = itPriority;
+    }
+
+    // Filter ตาม Status
+    if (status && typeof status === 'string') {
+      where.currentStatus = status;
+    }
+
+    // 5. ดึงข้อมูลแบบ Pagination
+    const totalItems = await prisma.ticket.count({ where });
+    const totalPages = Math.ceil(totalItems / sizeNum) || 1;
+    const skip = (pageNum - 1) * sizeNum;
+
+    const tickets = await prisma.ticket.findMany({
+      where,
+      orderBy: {
+        [sort as string]: sortOrder,
+      },
+      skip,
+      take: sizeNum,
+      include: {
+        category: { select: { id: true, name: true } },
+        relatedSystem: { select: { id: true, name: true } },
+      },
+    });
+
+    // 6. ตอบกลับข้อมูล
+    return res.status(200).json({
+      success: true,
+      data: {
+        tickets,
+        pagination: {
+          page: pageNum,
+          pageSize: sizeNum,
+          totalItems,
+          totalPages,
+        },
+      },
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Unable to fetch tickets.' },
     });
   }
 });
