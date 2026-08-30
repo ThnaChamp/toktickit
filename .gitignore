@@ -1,0 +1,7 @@
+node_modules/
+test-results/
+playwright-report/
+docs/lab-01/screenshots/
+docs/lab-02/screenshots/
+.env
+dist/
