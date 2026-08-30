@@ -30,3 +30,4 @@ export function validateDescription(description: unknown): ValidationError | nul
   }
   return null;
 }
+

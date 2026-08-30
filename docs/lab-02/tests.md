@@ -107,23 +107,23 @@
 
 | Test ID | Type | Req / AC | What It Tests | Expected Result | Test File | Final |
 |---------|------|----------|---------------|-----------------|-----------|-------|
-| E2E-01 | E2E | AC-01, AC-02 | Select Requester → Create Ticket → see Ticket Number | Ticket Number displayed; stored in DB | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
-| E2E-02 | E2E | AC-09 | Select Requester A → view tickets → switch to B → tickets change | Requester A's tickets absent for B | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
-| E2E-03 | E2E | AC-10, AC-11 | Search and filter in My Tickets | Correct filtered results shown | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
-| E2E-04 | E2E | AC-13 | Paginate through My Tickets | Correct pages; accurate count | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
-| E2E-05 | E2E | AC-16, AC-17 | Open Ticket Detail → upload attachment | Attachment appears in list | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
-| E2E-06 | E2E | AC-20, AC-21 | Soft-remove attachment → download rejected | Removed badge shown; download fails with 403 | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
-| E2E-07 | E2E | AC-03 | Direct URL access to other Requester's ticket | 403 page or redirect | `e2e/lab-02/requester-ticket-flow.spec.ts` | |
+| E2E-01 | E2E | AC-01, AC-02 | Select Requester → Create Ticket → see Ticket Number | Ticket Number displayed; stored in DB | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
+| E2E-02 | E2E | AC-09 | Select Requester A → view tickets → switch to B → tickets change | Requester A's tickets absent for B | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
+| E2E-03 | E2E | AC-10, AC-11 | Search and filter in My Tickets | Correct filtered results shown | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
+| E2E-04 | E2E | AC-13 | Paginate through My Tickets | Correct pages; accurate count | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
+| E2E-05 | E2E | AC-16, AC-17 | Open Ticket Detail → upload attachment | Attachment appears in list | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
+| E2E-06 | E2E | AC-20, AC-21 | Soft-remove attachment → download rejected | Removed badge shown; download fails with 403 | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
+| E2E-07 | E2E | AC-03 | Direct URL access to other Requester's ticket | 403 page or redirect | `e2e/lab-02/requester-ticket-flow.spec.ts` | PASS |
 
 ### 2.5 Responsive and Visual Tests
 
 | Test ID | Type | Req / AC | What It Tests | Expected Result | Test File | Final |
 |---------|------|----------|---------------|-----------------|-----------|-------|
-| VIS-01 | Responsive | AC-22 | My Tickets at mobile (375px) | Card layout; no horizontal scroll | `e2e/lab-02/responsive.spec.ts` | |
-| VIS-02 | Responsive | AC-23 | Create Ticket validation at mobile | Error messages visible; no clipping | `e2e/lab-02/responsive.spec.ts` | |
-| VIS-03 | Responsive | — | Create Ticket at desktop (1280px) | Multi-column layout screenshot matches ui-spec | `e2e/lab-02/responsive.spec.ts` | |
-| VIS-04 | Responsive | — | My Tickets at tablet (768px) | Usable layout; no overflow | `e2e/lab-02/responsive.spec.ts` | |
-| VIS-05 | Visual | — | Priority and status badges — all variants | All badge texts and colors match spec | `e2e/lab-02/responsive.spec.ts` | |
+| VIS-01 | Responsive | AC-22 | My Tickets at mobile (375px) | Card layout; no horizontal scroll | `e2e/lab-02/responsive.spec.ts` | PASS |
+| VIS-02 | Responsive | AC-23 | Create Ticket validation at mobile | Error messages visible; no clipping | `e2e/lab-02/responsive.spec.ts` | PASS |
+| VIS-03 | Responsive | — | Create Ticket at desktop (1280px) | Multi-column layout screenshot matches ui-spec | `e2e/lab-02/responsive.spec.ts` | PASS |
+| VIS-04 | Responsive | — | My Tickets at tablet (768px) | Usable layout; no overflow | `e2e/lab-02/responsive.spec.ts` | PASS |
+| VIS-05 | Visual | — | Priority and status badges — all variants | All badge texts and colors match spec | `e2e/lab-02/responsive.spec.ts` | PASS |
 
 ---
 
@@ -164,33 +164,33 @@
 To be completed after implementation with actual screenshots.
 
 ### 4.1 Colors and Branding
-- [ ] App header background is `#006B3C`.
-- [ ] Primary buttons are `#006B3C`.
-- [ ] Active nav link uses `#0B7A46` accent.
-- [ ] Read-only fields use `#F0F4F1` background; visually distinct from editable fields.
-- [ ] Error text is dark red (`#B91C1C`); error border is `#DC2626`.
-- [ ] Body text is dark charcoal-green (not pure black).
+- [x] App header background is `#006B3C`.
+- [x] Primary buttons are `#006B3C`.
+- [x] Active nav link uses `#0B7A46` accent.
+- [x] Read-only fields use `#F0F4F1` background; visually distinct from editable fields.
+- [x] Error text is dark red (`#B91C1C`); error border is `#DC2626`.
+- [x] Body text is dark charcoal-green (not pure black).
 
 ### 4.2 Form and Validation
-- [ ] All required fields show a red asterisk.
-- [ ] Validation messages appear below the associated field.
-- [ ] Submit button shows spinner and is disabled during submission.
-- [ ] Form values preserved after API failure.
+- [x] All required fields show a red asterisk.
+- [x] Validation messages appear below the associated field.
+- [x] Submit button shows spinner and is disabled during submission.
+- [x] Form values preserved after API failure.
 
 ### 4.3 My Tickets
-- [ ] Desktop: full table with all columns.
-- [ ] Mobile: card layout; no horizontal scrolling.
-- [ ] Sort indicators visible on sortable columns.
-- [ ] Clear Filters appears only when a filter is active.
-- [ ] Empty state and no-results state are visually distinct.
-- [ ] Pagination text "Showing X to Y of Z tickets" is accurate.
+- [x] Desktop: full table with all columns.
+- [x] Mobile: card layout; no horizontal scrolling.
+- [x] Sort indicators visible on sortable columns.
+- [x] Clear Filters appears only when a filter is active.
+- [x] Empty state and no-results state are visually distinct.
+- [x] Pagination text "Showing X to Y of Z tickets" is accurate.
 
 ### 4.4 Ticket Detail and Attachments
-- [ ] All header fields are read-only (gray-green background).
-- [ ] Priority and status badges are text-labeled (not color-only).
-- [ ] Removed attachments show "REMOVED" badge; no Download button.
-- [ ] Add Attachment disabled at limit with tooltip.
-- [ ] Remove dialog requires non-empty reason before enabling Remove button.
+- [x] All header fields are read-only (gray-green background).
+- [x] Priority and status badges are text-labeled (not color-only).
+- [x] Removed attachments show "REMOVED" badge; no Download button.
+- [x] Add Attachment disabled at limit with tooltip.
+- [x] Remove dialog requires non-empty reason before enabling Remove button.
 
 ---
 
@@ -273,6 +273,18 @@ npm run test:lab-02
 | UI-11 | PASS | TicketDetail renders all header metadata fields as read-only |
 | UI-12 | PASS | AttachmentSection hides Download button for soft-removed attachment |
 | UI-13 | PASS | AttachmentSection disables Add Attachment button at 5 active attachments limit |
+| E2E-01 | PASS | Select Requester → Create Ticket → Official Ticket Number displayed on success |
+| E2E-02 | PASS | Multi-requester isolation verified when switching active requester context |
+| E2E-03 | PASS | Search query and category filters accurately isolate matching tickets |
+| E2E-04 | PASS | Pagination metadata and controls render accurately for ticket lists |
+| E2E-05 | PASS | Ticket Detail displays metadata and supports new attachment upload |
+| E2E-06 | PASS | Soft-removal requires reason; download blocked for removed items |
+| E2E-07 | PASS | Direct URL access to another requester's ticket returns 403 Forbidden |
+| VIS-01 | PASS | My Tickets renders mobile card layout with zero horizontal overflow at 375px |
+| VIS-02 | PASS | Create Ticket form stacks cleanly with visible validation errors at 375px |
+| VIS-03 | PASS | Create Ticket conforms to Zen Green desktop layout at 1280px |
+| VIS-04 | PASS | My Tickets renders tablet layout with no overflow at 768px |
+| VIS-05 | PASS | Priority and status badges render with proper text and colors in Ticket Detail |
 
 ---
 
