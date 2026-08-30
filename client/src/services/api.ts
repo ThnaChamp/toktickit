@@ -42,6 +42,29 @@ export interface Ticket {
   relatedSystem?: { id: number; name: string };
 }
 
+export interface Attachment {
+  id: number;
+  ticketId: number;
+  uploaderId: number;
+  originalFilename: string;
+  storedFilename: string;
+  mimeType: string;
+  sizeBytes: number;
+  storagePath: string;
+  removedAt: string | null;
+  removedByRequesterId: number | null;
+  removalReason: string | null;
+  createdAt: string;
+  uploader?: { id: number; name: string };
+  removedBy?: { id: number; name: string };
+}
+
+export interface TicketDetail extends Ticket {
+  requester?: { id: number; name: string; email: string };
+  ticketOwner?: { id: number; name: string; email: string } | null;
+  attachments: Attachment[];
+}
+
 export interface Pagination {
   page: number;
   pageSize: number;
@@ -151,4 +174,55 @@ export async function fetchTickets(params: GetTicketsParams): Promise<GetTickets
   }
 
   return json.data as GetTicketsResponse;
+}
+
+// 6. ดึงรายละเอียดตั๋วรายใบ (Ticket Detail)
+export async function fetchTicketDetail(ticketNumber: string, requesterId: number): Promise<TicketDetail> {
+  const res = await fetch(`${BASE_URL}/api/tickets/${ticketNumber}?requesterId=${requesterId}`);
+  const json = await res.json();
+  if (!res.ok) {
+    const errorMsg = json.error?.message || "Failed to fetch ticket detail";
+    throw new Error(errorMsg);
+  }
+  return json.data as TicketDetail;
+}
+
+// 7. อัปโหลดไฟล์แนบ (Attachment Upload)
+export async function uploadAttachment(ticketNumber: string, requesterId: number, file: File): Promise<Attachment> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("requesterId", String(requesterId));
+
+  const res = await fetch(`${BASE_URL}/api/tickets/${ticketNumber}/attachments`, {
+    method: "POST",
+    body: formData,
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    const errorMsg = json.error?.message || "Failed to upload attachment";
+    throw new Error(errorMsg);
+  }
+  return json.data as Attachment;
+}
+
+// 8. Soft-Remove ลบไฟล์แนบพร้อมระบุเหตุผล
+export async function deleteAttachment(attachmentId: number, requesterId: number, removalReason: string): Promise<Attachment> {
+  const res = await fetch(`${BASE_URL}/api/attachments/${attachmentId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ requesterId, removalReason }),
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    const errorMsg = json.error?.message || "Failed to remove attachment";
+    throw new Error(errorMsg);
+  }
+  return json.data as Attachment;
+}
+
+// 9. URL สำหรับดาวน์โหลดไฟล์
+export function getAttachmentDownloadUrl(attachmentId: number, requesterId: number): string {
+  return `${BASE_URL}/api/attachments/${attachmentId}/download?requesterId=${requesterId}`;
 }

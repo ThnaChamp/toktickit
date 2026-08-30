@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import RequesterSelectionPage from "./pages/RequesterSelectionPage";
 import CreateTicketPage from "./pages/CreateTicketPage";
 import MyTicketsPage from "./pages/MyTicketsPage";
+import TicketDetailPage from "./pages/TicketDetailPage";
 
 // ─── Guard: redirect to /select-requester if no requester selected (FR-14) ───
 
@@ -36,6 +37,11 @@ function AppShell() {
           <Route path="/create-ticket" element={
             <GuardedRoute>
               <CreateTicketPage />
+            </GuardedRoute>
+          } />
+          <Route path="/tickets/:ticketNumber" element={
+            <GuardedRoute>
+              <TicketDetailPage />
             </GuardedRoute>
           } />
         </Routes>

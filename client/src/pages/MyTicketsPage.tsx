@@ -354,7 +354,9 @@ export default function MyTicketsPage() {
                 {tickets.map((t) => (
                   <tr key={t.id} className="hover:bg-[#F5F7F6] transition-colors">
                     <td className="py-3 px-4 font-mono font-semibold text-[#006B3C]">
-                      {t.ticketNumber}
+                      <Link to={`/tickets/${t.ticketNumber}`} className="hover:underline">
+                        {t.ticketNumber}
+                      </Link>
                     </td>
                     <td className="py-3 px-4 text-xs text-[#4A6355] whitespace-nowrap">
                       {new Date(t.createdAt).toLocaleDateString()}
@@ -388,9 +390,9 @@ export default function MyTicketsPage() {
                 className="bg-white p-4 rounded-xl border border-[#D1E0D8] shadow-sm space-y-2 text-sm"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-[#006B3C] text-sm">
+                  <Link to={`/tickets/${t.ticketNumber}`} className="font-mono font-bold text-[#006B3C] text-sm hover:underline">
                     {t.ticketNumber}
-                  </span>
+                  </Link>
                   {getStatusBadge(t.currentStatus)}
                 </div>
                 <h4 className="font-semibold text-[#1A2E22]">{t.summary}</h4>
