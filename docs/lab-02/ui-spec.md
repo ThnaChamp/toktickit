@@ -430,47 +430,47 @@ After implementation, verify each item visually at all three viewports (desktop,
 
 ### 11.1 Colors and Typography
 
-- [ ] App header uses `#006B3C` background.
-- [ ] Primary buttons use `#006B3C`.
-- [ ] Active nav link has `#0B7A46` accent or underline.
-- [ ] Page background is `#F5F7F6` or similarly quiet near-white.
-- [ ] Cards/panels are white with subtle border and shadow.
-- [ ] Read-only fields use `#F0F4F1` background (clearly distinct from editable fields).
-- [ ] Error messages use dark red text (`#B91C1C`) and red border.
-- [ ] Body text is dark charcoal-green, not pure black.
+- [x] App header uses `#006B3C` background.
+- [x] Primary buttons use `#006B3C`.
+- [x] Active nav link has `#0B7A46` accent or underline.
+- [x] Page background is `#F5F7F6` or similarly quiet near-white.
+- [x] Cards/panels are white with subtle border and shadow.
+- [x] Read-only fields use `#F0F4F1` background (clearly distinct from editable fields).
+- [x] Error messages use dark red text (`#B91C1C`) and red border.
+- [x] Body text is dark charcoal-green, not pure black.
 
 ### 11.2 Form States
 
-- [ ] Required field asterisks are visible and red.
-- [ ] Validation messages appear immediately below the invalid field.
-- [ ] Editable and read-only fields are visually distinct.
-- [ ] Submit button shows spinner and is disabled while submitting.
-- [ ] Form values are preserved after an API failure.
-- [ ] Success state clearly shows the generated Ticket Number.
+- [x] Required field asterisks are visible and red.
+- [x] Validation messages appear immediately below the invalid field.
+- [x] Editable and read-only fields are visually distinct.
+- [x] Submit button shows spinner and is disabled while submitting.
+- [x] Form values are preserved after an API failure.
+- [x] Success state clearly shows the generated Ticket Number.
 
 ### 11.3 My Tickets
 
-- [ ] Desktop: full table with all required columns.
-- [ ] Mobile: ticket cards with no horizontal scrolling.
-- [ ] Sort indicators (↕ / ↑ / ↓) visible on sortable columns.
-- [ ] "Clear Filters" button appears only when a filter is active.
-- [ ] Empty state and no-results state are visually distinct.
-- [ ] Pagination shows correct "Showing X to Y of Z" text.
+- [x] Desktop: full table with all required columns.
+- [x] Mobile: ticket cards with no horizontal scrolling.
+- [x] Sort indicators (↕ / ↑ / ↓) visible on sortable columns.
+- [x] "Clear Filters" button appears only when a filter is active.
+- [x] Empty state and no-results state are visually distinct.
+- [x] Pagination shows correct "Showing X to Y of Z" text.
 
 ### 11.4 Ticket Detail
 
-- [ ] All header fields are visually read-only (different background).
-- [ ] Priority and status badges are consistent with Section 6.3.
-- [ ] Active attachments show Download and Remove buttons.
-- [ ] Removed attachments show "REMOVED" badge and no download option.
-- [ ] "Add Attachment" button is disabled and shows tooltip when limit is reached.
+- [x] All header fields are visually read-only (different background).
+- [x] Priority and status badges are consistent with Section 6.3.
+- [x] Active attachments show Download and Remove buttons.
+- [x] Removed attachments show "REMOVED" badge and no download option.
+- [x] "Add Attachment" button is disabled and shows tooltip when limit is reached.
 
 ### 11.5 Responsive
 
-- [ ] No horizontal page scrolling at any viewport.
-- [ ] No clipped labels or overlapping elements at tablet or mobile.
-- [ ] Buttons have sufficient touch target size (≥ 44px) on mobile.
-- [ ] Navigation bar is usable on mobile (hamburger or condensed layout).
+- [x] No horizontal page scrolling at any viewport.
+- [x] No clipped labels or overlapping elements at tablet or mobile.
+- [x] Buttons have sufficient touch target size (≥ 44px) on mobile.
+- [x] Navigation bar is usable on mobile (hamburger or condensed layout).
 
 ---
 

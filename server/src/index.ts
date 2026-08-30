@@ -9,6 +9,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { generateTicketNumber } from './utils/ticketNumber.js';
 import { sanitizeStoredFilename } from './utils/fileSanitizer.js';
+import { validateSummary, validateDescription } from './utils/validation.js';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -136,15 +137,15 @@ app.post('/api/tickets', async (req: Request, res: Response) => {
     if (!requestedPriority || !validPriorities.includes(requestedPriority)) {
       errors.push({ field: 'requestedPriority', message: 'Requested priority must be LOW, MEDIUM, or HIGH.' });
     }
-    // 5. ตรวจสอบ Summary (5 - 200 ตัวอักษร)
-    const trimmedSummary = typeof summary === 'string' ? summary.trim() : '';
-    if (trimmedSummary.length < 5 || trimmedSummary.length > 200) {
-      errors.push({ field: 'summary', message: 'Summary must be between 5 and 200 characters.' });
+    // 5. ตรวจสอบ Summary (BR-07)
+    const summaryError = validateSummary(summary);
+    if (summaryError) {
+      errors.push(summaryError);
     }
-    // 6. ตรวจสอบ Description (10 - 3000 ตัวอักษร)
-    const trimmedDescription = typeof description === 'string' ? description.trim() : '';
-    if (trimmedDescription.length < 10 || trimmedDescription.length > 3000) {
-      errors.push({ field: 'description', message: 'Description must be between 10 and 3000 characters.' });
+    // 6. ตรวจสอบ Description (BR-08)
+    const descriptionError = validateDescription(description);
+    if (descriptionError) {
+      errors.push(descriptionError);
     }
     // ถ้ามี Error แม้แต่อันเดียว ให้โยน 400 Bad Request กลับไป
     if (errors.length > 0) {

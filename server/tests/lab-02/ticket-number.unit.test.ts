@@ -42,5 +42,23 @@ describe('UNIT-01 & UNIT-02: Ticket Number Generator', () => {
     const ticketNumber = await generateTicketNumber(mockPrisma);
     expect(ticketNumber).toBe(`TKT-${currentYear}-000042`);
   });
+
+  it('UNIT-03: should reset sequence to 000001 when rolling over to a new year even if prior year had tickets', async () => {
+    const mockPrisma = {
+      ticket: {
+        findFirst: vi.fn().mockImplementation(({ where }) => {
+          // When querying for current year prefix, no tickets exist yet in the new year
+          if (where?.ticketNumber?.startsWith === `TKT-${currentYear}-`) {
+            return Promise.resolve(null);
+          }
+          // Prior year ticket with high sequence number
+          return Promise.resolve({ ticketNumber: `TKT-${currentYear - 1}-009999` });
+        }),
+      },
+    };
+
+    const ticketNumber = await generateTicketNumber(mockPrisma);
+    expect(ticketNumber).toBe(`TKT-${currentYear}-000001`);
+  });
 });
 
