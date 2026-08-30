@@ -304,11 +304,16 @@ app.get('/api/tickets', async (req: Request, res: Response) => {
     const totalPages = Math.ceil(totalItems / sizeNum) || 1;
     const skip = (pageNum - 1) * sizeNum;
 
+    const orderByList: Array<Record<string, string>> = [
+      { [sort as string]: sortOrder },
+    ];
+
+    if (sort !== 'ticketNumber') {
+      orderByList.push({ ticketNumber: 'desc' });
+    }
     const tickets = await prisma.ticket.findMany({
       where,
-      orderBy: {
-        [sort as string]: sortOrder,
-      },
+      orderBy: orderByList,
       skip,
       take: sizeNum,
       include: {
