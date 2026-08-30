@@ -158,6 +158,10 @@ app.post('/api/tickets', async (req: Request, res: Response) => {
         },
       });
     }
+    // Trim summary and description per BR-07 and BR-08
+    const trimmedSummary = typeof summary === 'string' ? summary.trim() : summary;
+    const trimmedDescription = typeof description === 'string' ? description.trim() : description;
+
     // --- บันทึกลง Database (พร้อม Retry ป้องกัน Concurrency Race Condition) ---
     let newTicket;
     let attempts = 0;

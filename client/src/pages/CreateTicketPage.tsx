@@ -5,10 +5,20 @@ import {
   fetchCategories,
   fetchRelatedSystems,
   createTicket,
+  uploadAttachment,
   type Category,
   type RelatedSystem,
   type Ticket,
 } from "../services/api";
+
+interface SelectedAttachment {
+  id: string;
+  file: File;
+  error?: string;
+}
+
+const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".pdf"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export default function CreateTicketPage() {
   const { requester } = useRequester();
@@ -24,6 +34,49 @@ export default function CreateTicketPage() {
   const [requestedPriority, setRequestedPriority] = useState<"LOW" | "MEDIUM" | "HIGH">("MEDIUM");
   const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
+
+  // Attachments State
+  const [attachments, setAttachments] = useState<SelectedAttachment[]>([]);
+  const [attachmentLimitError, setAttachmentLimitError] = useState("");
+
+  function handleFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    setAttachmentLimitError("");
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+
+    const newItems: SelectedAttachment[] = [];
+    const currentCount = attachments.length;
+
+    for (let i = 0; i < fileList.length; i++) {
+      if (currentCount + newItems.length >= 5) {
+        setAttachmentLimitError("Maximum limit of 5 attachments reached.");
+        break;
+      }
+      const file = fileList[i];
+      const ext = "." + file.name.split(".").pop()?.toLowerCase();
+      let error: string | undefined;
+
+      if (!ALLOWED_EXTENSIONS.includes(ext)) {
+        error = "Unsupported file type (only JPG, PNG, WEBP, PDF allowed).";
+      } else if (file.size > MAX_FILE_SIZE) {
+        error = "File size exceeds 5 MB limit.";
+      }
+
+      newItems.push({
+        id: `${Date.now()}-${i}-${file.name}`,
+        file,
+        error,
+      });
+    }
+
+    setAttachments((prev) => [...prev, ...newItems].slice(0, 5));
+    e.target.value = "";
+  }
+
+  function removeAttachment(id: string) {
+    setAttachments((prev) => prev.filter((item) => item.id !== id));
+    setAttachmentLimitError("");
+  }
 
   // UI / Submission State
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -94,6 +147,16 @@ export default function CreateTicketPage() {
         description: description.trim(),
       });
 
+      // Upload valid attachments if any
+      const validFiles = attachments.filter((a) => !a.error);
+      for (const item of validFiles) {
+        try {
+          await uploadAttachment(ticket.ticketNumber, requester.id, item.file);
+        } catch {
+          // preserve ticket even if upload fails
+        }
+      }
+
       // สำเร็จ: เก็บ Ticket ที่ได้ไว้แสดงผลใน Success State
       setCreatedTicket(ticket);
     } catch (err: unknown) {
@@ -130,6 +193,8 @@ export default function CreateTicketPage() {
                 setRelatedSystemId("");
                 setRequestedPriority("MEDIUM");
                 setErrors({});
+                setAttachments([]);
+                setAttachmentLimitError("");
               }}
               className="px-5 py-2.5 bg-white border border-[#D1E0D8] text-[#1A2E22] font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm cursor-pointer"
             >
@@ -276,6 +341,85 @@ export default function CreateTicketPage() {
               className="w-full border border-[#D1E0D8] rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006B3C] resize-y text-[#1A2E22]"
             />
             {errors.description && <p className="text-[#B91C1C] text-xs mt-1">{errors.description}</p>}
+          </div>
+
+          {/* Attachments Section (optional - per ui-spec 4.2 & 4.4) */}
+          <div className="space-y-3 pt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block text-sm font-medium text-[#1A2E22]">
+                  Attachments <span className="text-xs text-[#4A6355] font-normal">(optional)</span>
+                </label>
+                <p className="text-xs text-[#4A6355]">
+                  Allowed formats: JPG, PNG, WEBP, PDF (Max 5 MB per file, up to 5 files)
+                </p>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="create-attachment-input"
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
+                    attachments.length >= 5 || submitting
+                      ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                      : "bg-[#EAF6EF] text-[#006B3C] border-[#0B7A46] hover:bg-[#d6eedf] cursor-pointer shadow-sm"
+                  }`}
+                  title={attachments.length >= 5 ? "Maximum limit of 5 attachments reached" : "Add files to attach"}
+                >
+                  <span>📎</span> + Add Files
+                </label>
+                <input
+                  id="create-attachment-input"
+                  type="file"
+                  multiple
+                  accept=".jpg,.jpeg,.png,.webp,.pdf"
+                  disabled={attachments.length >= 5 || submitting}
+                  onChange={handleFilesSelected}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            {/* Error when exceeding limit */}
+            {attachmentLimitError && (
+              <p className="text-[#B91C1C] text-xs font-medium">{attachmentLimitError}</p>
+            )}
+
+            {/* Attachments List */}
+            {attachments.length > 0 && (
+              <div className="border border-[#D1E0D8] rounded-lg p-3 bg-[#F9FAF9] space-y-2">
+                {attachments.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`flex items-center justify-between p-2.5 rounded-md text-xs border ${
+                      item.error
+                        ? "bg-red-50 border-red-200 text-red-700"
+                        : "bg-white border-[#D1E0D8] text-[#1A2E22]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span>{item.error ? "⚠️" : item.file.type.includes("pdf") ? "📄" : "🖼️"}</span>
+                      <span className="font-medium truncate max-w-xs">{item.file.name}</span>
+                      <span className="text-[#4A6355] shrink-0">
+                        ({(item.file.size / (1024 * 1024)).toFixed(2)} MB)
+                      </span>
+                      {item.error && (
+                        <span className="text-[#DC2626] font-semibold text-xs ml-2">
+                          — {item.error}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeAttachment(item.id)}
+                      className="text-gray-400 hover:text-red-600 p-1 text-sm font-bold cursor-pointer transition-colors"
+                      title="Remove file"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Submit Buttons */}
