@@ -47,7 +47,7 @@
 | UNIT-06 | Unit | BR-08 | Description validation rejects < 10 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
 | UNIT-07 | Unit | BR-08 | Description validation rejects > 3000 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
 | UNIT-08 | Unit | BR-22 | Filename sanitizer produces UUID-prefixed safe filename | Output matches `^[a-f0-9-]{36}-.+$` | `server/tests/lab-02/attachment.unit.test.ts` | |
-| UNIT-09 | Unit | BR-22 | Filename sanitizer preserves original filename in metadata | `originalFilename` unchanged | `server/tests/lab-02/attachment.unit.test.ts` | |
+| UNIT-09 | Unit | BR-22 | Filename sanitizer preserves original filename in metadata | `originalFilename` unchanged | `server/tests/lab-02/attachment.unit.test.ts` | PASS |
 
 ### 2.2 API / Integration Tests
 
@@ -67,18 +67,18 @@
 | API-12 | API | AC-12, BR-23 | GET `/api/tickets` default sort | Ordered by `createdAt DESC` | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
 | API-13 | API | AC-13, BR-24 | GET `/api/tickets?page=2&pageSize=10` | Correct page of 10 tickets; accurate pagination metadata | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
 | API-14 | API | BR-25 | GET `/api/tickets?pageSize=99` | 400; `INVALID_PAGE_SIZE` | `server/tests/lab-02/my-tickets.api.test.ts` | PASS |
-| API-15 | API | AC-03, BR-06 | GET `/api/tickets/:ticketNumber` with wrong `requesterId` | 403 `FORBIDDEN` | `server/tests/lab-02/ticket-detail.api.test.ts` | |
-| API-16 | API | AC-16 | GET `/api/tickets/:ticketNumber` with correct `requesterId` | 200; full ticket including attachments | `server/tests/lab-02/ticket-detail.api.test.ts` | |
-| API-17 | API | — | GET `/api/tickets/TKT-0000-NOTEXIST` | 404 `NOT_FOUND` | `server/tests/lab-02/ticket-detail.api.test.ts` | |
-| API-18 | API | AC-17, BR-18 | POST attachment when 4 active attachments exist | 201; total active = 5 | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-19 | API | AC-18, BR-18 | POST attachment when 5 active attachments exist | 409 `ATTACHMENT_LIMIT` | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-20 | API | BR-17 | POST attachment > 5 MB | 413 `FILE_TOO_LARGE` | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-21 | API | BR-16 | POST attachment with unsupported type (e.g. `.exe`) | 415 `UNSUPPORTED_TYPE` | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-22 | API | AC-19 | GET `/api/attachments/:id/download` for active attachment | 200; file bytes returned | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-23 | API | AC-21, BR-20 | GET download for removed attachment | 403 `REMOVED` | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-24 | API | AC-20, BR-19 | DELETE `/api/attachments/:id` with valid reason | 200; `removedAt` set; `removalReason` stored | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-25 | API | BR-19 | DELETE attachment without `removalReason` | 400 `VALIDATION_ERROR` | `server/tests/lab-02/attachments.api.test.ts` | |
-| API-26 | API | — | DELETE already-removed attachment | 409 `ALREADY_REMOVED` | `server/tests/lab-02/attachments.api.test.ts` | |
+| API-15 | API | AC-03, BR-06 | GET `/api/tickets/:ticketNumber` with wrong `requesterId` | 403 `FORBIDDEN` | `server/tests/lab-02/ticket-detail.api.test.ts` | PASS |
+| API-16 | API | AC-16 | GET `/api/tickets/:ticketNumber` with correct `requesterId` | 200; full ticket including attachments | `server/tests/lab-02/ticket-detail.api.test.ts` | PASS |
+| API-17 | API | — | GET `/api/tickets/TKT-0000-NOTEXIST` | 404 `NOT_FOUND` | `server/tests/lab-02/ticket-detail.api.test.ts` | PASS |
+| API-18 | API | AC-17, BR-18 | POST attachment when 4 active attachments exist | 201; total active = 5 | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-19 | API | AC-18, BR-18 | POST attachment when 5 active attachments exist | 409 `ATTACHMENT_LIMIT` | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-20 | API | BR-17 | POST attachment > 5 MB | 413 `FILE_TOO_LARGE` | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-21 | API | BR-16 | POST attachment with unsupported type (e.g. `.exe`) | 415 `UNSUPPORTED_TYPE` | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-22 | API | AC-19 | GET `/api/attachments/:id/download` for active attachment | 200; file bytes returned | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-23 | API | AC-21, BR-20 | GET download for removed attachment | 403 `REMOVED` | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-24 | API | AC-20, BR-19 | DELETE `/api/attachments/:id` with valid reason | 200; `removedAt` set; `removalReason` stored | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-25 | API | BR-19 | DELETE attachment without `removalReason` | 400 `VALIDATION_ERROR` | `server/tests/lab-02/attachments.api.test.ts` | PASS |
+| API-26 | API | — | DELETE already-removed attachment | 409 `ALREADY_REMOVED` | `server/tests/lab-02/attachments.api.test.ts` | PASS |
 | API-27 | API | BR-04 | GET `/api/requesters` — inactive Requester is absent | Inactive Requester not in response | `server/tests/lab-02/requesters.api.test.ts` | PASS |
 
 ### 2.3 UI Component Tests
@@ -86,8 +86,8 @@
 | Test ID | Type | Req / AC | What It Tests | Expected Result | Test File | Final |
 |---------|------|----------|---------------|-----------------|-----------|-------|
 | UI-01 | UI | AC-05 | CreateTicket: submit with empty Summary | Field error below Summary; API not called | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
-| UI-02 | UI | AC-06 | CreateTicket: select file > 5 MB | Per-file error shown; file not in valid list | `client/tests/lab-02/AttachmentSection.test.tsx` | |
-| UI-03 | UI | AC-07 | CreateTicket: select unsupported file type | Per-file error shown; file not in valid list | `client/tests/lab-02/AttachmentSection.test.tsx` | |
+| UI-02 | UI | AC-06 | CreateTicket: select file > 5 MB | Per-file error shown; file not in valid list | `client/tests/lab-02/AttachmentSection.test.tsx` | PASS |
+| UI-03 | UI | AC-07 | CreateTicket: select unsupported file type | Per-file error shown; file not in valid list | `client/tests/lab-02/AttachmentSection.test.tsx` | PASS |
 | UI-04 | UI | BR-14 | CreateTicket: Submit button shows busy state during submission | Button text changes; button disabled | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
 | UI-05 | UI | AC-08 | CreateTicket: API failure preserves form values | All field values intact after error | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
 | UI-06 | UI | AC-01 | CreateTicket: success state shows Ticket Number | Ticket Number displayed prominently | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
@@ -95,9 +95,9 @@
 | UI-08 | UI | AC-14 | MyTickets: empty state when no tickets exist | Empty-state component rendered (not error) | `client/tests/lab-02/MyTickets.test.tsx` | PASS |
 | UI-09 | UI | AC-15 | MyTickets: no-results state after search | No-results component rendered | `client/tests/lab-02/MyTickets.test.tsx` | PASS |
 | UI-10 | UI | — | MyTickets: Clear Filters appears only when filter active | Not visible initially; visible after filter set | `client/tests/lab-02/MyTickets.test.tsx` | PASS |
-| UI-11 | UI | AC-16 | TicketDetail: all header fields render as read-only | No editable inputs in header | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | |
-| UI-12 | UI | BR-20 | AttachmentSection: removed attachment has no Download button | Download button absent for removed items | `client/tests/lab-02/AttachmentSection.test.tsx` | |
-| UI-13 | UI | BR-18 | AttachmentSection: Add Attachment disabled at limit | Button disabled; tooltip visible | `client/tests/lab-02/AttachmentSection.test.tsx` | |
+| UI-11 | UI | AC-16 | TicketDetail: all header fields render as read-only | No editable inputs in header | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | PASS |
+| UI-12 | UI | BR-20 | AttachmentSection: removed attachment has no Download button | Download button absent for removed items | `client/tests/lab-02/AttachmentSection.test.tsx` | PASS |
+| UI-13 | UI | BR-18 | AttachmentSection: Add Attachment disabled at limit | Button disabled; tooltip visible | `client/tests/lab-02/AttachmentSection.test.tsx` | PASS |
 | UI-14 | UI | — | RequiredField: red asterisk present on all required fields | `*` visible for Summary, Description, Category, etc. | `client/tests/lab-02/CreateTicket.test.tsx` | PASS |
 | UI-15 | UI | AC-02 | Dev Requester Selector: loading state shown during fetch | Spinner/skeleton visible | `client/tests/lab-02/DevRequesterSelector.test.tsx` | PASS |
 | UI-16 | UI | AC-24 | Dev Requester Selector: error state with Retry button | Error message + Retry button rendered | `client/tests/lab-02/DevRequesterSelector.test.tsx` | PASS |
@@ -249,6 +249,24 @@ npm run test:lab-02
 | UI-08 | PASS | MyTickets displays friendly empty state when user has 0 tickets |
 | UI-09 | PASS | MyTickets displays no-results state when search/filters match 0 tickets |
 | UI-10 | PASS | MyTickets Clear Filters button appears only when filters are active |
+| UNIT-09 | PASS | Filename sanitizer preserves original filename and cleans unsafe characters |
+| API-15 | PASS | GET /api/tickets/:ticketNumber returns 403 when accessed by non-owner |
+| API-16 | PASS | GET /api/tickets/:ticketNumber returns 200 with full details and relations |
+| API-17 | PASS | GET /api/tickets/:ticketNumber returns 404 for non-existent ticket |
+| API-18 | PASS | POST attachment succeeds with valid file (JPG/PNG/WEBP/PDF <= 5 MB) |
+| API-19 | PASS | POST attachment returns 409 ATTACHMENT_LIMIT at 5 active attachments |
+| API-20 | PASS | POST attachment returns 413 FILE_TOO_LARGE for file > 5 MB |
+| API-21 | PASS | POST attachment returns 415 UNSUPPORTED_TYPE for disallowed MIME type |
+| API-22 | PASS | GET /api/attachments/:id/download allows downloading active attachment |
+| API-23 | PASS | GET /api/attachments/:id/download returns 403 REMOVED for soft-deleted file |
+| API-24 | PASS | DELETE /api/attachments/:id sets removedAt and stores removalReason |
+| API-25 | PASS | DELETE /api/attachments/:id returns 400 VALIDATION_ERROR when reason omitted |
+| API-26 | PASS | DELETE /api/attachments/:id returns 409 ALREADY_REMOVED on double delete |
+| UI-02 | PASS | AttachmentSection shows error when selecting file larger than 5 MB |
+| UI-03 | PASS | AttachmentSection shows error when selecting unsupported file type |
+| UI-11 | PASS | TicketDetail renders all header metadata fields as read-only |
+| UI-12 | PASS | AttachmentSection hides Download button for soft-removed attachment |
+| UI-13 | PASS | AttachmentSection disables Add Attachment button at 5 active attachments limit |
 
 ---
 
