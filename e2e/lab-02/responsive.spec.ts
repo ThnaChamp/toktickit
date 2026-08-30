@@ -122,6 +122,26 @@ test.describe('VIS-01 to VIS-05 & UI-Spec Section 12 Visual Suite', () => {
       fullPage: true,
     });
 
+    // 2.2b Invalid Attachment Screenshot on Create Ticket screen (> 5 MB file)
+    const fileChooserPromise = page.waitForEvent('filechooser');
+    await page.locator('label[for="create-attachment-input"]').click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles({
+      name: 'large-error-log.png',
+      mimeType: 'image/png',
+      buffer: Buffer.alloc(6 * 1024 * 1024), // 6 MB exceeds 5 MB limit
+    });
+
+    await expect(page.locator('text=File size exceeds 5 MB limit.')).toBeVisible();
+
+    await page.screenshot({
+      path: 'artifacts/lab-02/screenshots/create-ticket/invalid-attachment.png',
+      fullPage: true,
+    });
+
+    // Remove invalid file so form can proceed
+    await page.click('button[title="Remove file"]');
+
     // Fill valid inputs for subsequent states
     await page.locator('select').nth(0).selectOption({ label: 'Hardware' });
     await page.locator('select').nth(1).selectOption({ label: 'Corporate Laptop' });
@@ -323,7 +343,7 @@ test.describe('VIS-01 to VIS-05 & UI-Spec Section 12 Visual Suite', () => {
       fullPage: true,
     });
 
-    // 5.3 Invalid Attachment Screenshot (> 5 MB file rejected)
+    // 5.3 Invalid Attachment on Ticket Detail (> 5 MB file rejected)
     const fileChooserPromise = page.waitForEvent('filechooser');
     await page.locator('label[for="attachment-input"]').click();
     const fileChooser = await fileChooserPromise;
@@ -334,11 +354,6 @@ test.describe('VIS-01 to VIS-05 & UI-Spec Section 12 Visual Suite', () => {
     });
 
     await expect(page.locator('text=File size exceeds 5 MB limit.')).toBeVisible();
-
-    await page.screenshot({
-      path: 'artifacts/lab-02/screenshots/create-ticket/invalid-attachment.png',
-      fullPage: true,
-    });
 
     // 5.4 Remove Attachment Dialog Modal
     await page.click('button:has-text("Remove")');
