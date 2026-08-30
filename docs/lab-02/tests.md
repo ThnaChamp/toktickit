@@ -46,7 +46,7 @@
 | UNIT-05 | Unit | BR-07 | Summary validation rejects > 200 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
 | UNIT-06 | Unit | BR-08 | Description validation rejects < 10 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
 | UNIT-07 | Unit | BR-08 | Description validation rejects > 3000 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
-| UNIT-08 | Unit | BR-22 | Filename sanitizer produces UUID-prefixed safe filename | Output matches `^[a-f0-9-]{36}-.+$` | `server/tests/lab-02/attachment.unit.test.ts` | |
+| UNIT-08 | Unit | BR-22 | Filename sanitizer produces UUID-prefixed safe filename | Output matches `^[a-f0-9-]{36}-.+$` | `server/tests/lab-02/attachment.unit.test.ts` | PASS |
 | UNIT-09 | Unit | BR-22 | Filename sanitizer preserves original filename in metadata | `originalFilename` unchanged | `server/tests/lab-02/attachment.unit.test.ts` | PASS |
 
 ### 2.2 API / Integration Tests
@@ -249,6 +249,7 @@ npm run test:lab-02
 | UI-08 | PASS | MyTickets displays friendly empty state when user has 0 tickets |
 | UI-09 | PASS | MyTickets displays no-results state when search/filters match 0 tickets |
 | UI-10 | PASS | MyTickets Clear Filters button appears only when filters are active |
+| UNIT-08 | PASS | Filename sanitizer produces UUID-prefixed safe filename |
 | UNIT-09 | PASS | Filename sanitizer preserves original filename and cleans unsafe characters |
 | API-15 | PASS | GET /api/tickets/:ticketNumber returns 403 when accessed by non-owner |
 | API-16 | PASS | GET /api/tickets/:ticketNumber returns 200 with full details and relations |
