@@ -41,11 +41,11 @@
 |---------|------|----------|---------------|-----------------|-----------|-------|
 | UNIT-01 | Unit | BR-01 | Ticket Number generator returns `TKT-{YEAR}-{6-digit zero-padded}` format | Correct format string | `server/tests/lab-02/ticket-number.unit.test.ts` | PASS |
 | UNIT-02 | Unit | BR-01 | Ticket Number generator pads sequence to 6 digits | `TKT-2026-000001` for seq=1 | `server/tests/lab-02/ticket-number.unit.test.ts` | PASS |
-| UNIT-03 | Unit | BR-07 | Summary trimming removes leading/trailing whitespace | `"  hello  "` → `"hello"` | `server/tests/lab-02/validation.unit.test.ts` | |
-| UNIT-04 | Unit | BR-07 | Summary validation rejects < 5 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
-| UNIT-05 | Unit | BR-07 | Summary validation rejects > 200 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
-| UNIT-06 | Unit | BR-08 | Description validation rejects < 10 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
-| UNIT-07 | Unit | BR-08 | Description validation rejects > 3000 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | |
+| UNIT-03 | Unit | BR-07 | Summary trimming removes leading/trailing whitespace | `"  hello  "` → `"hello"` | `server/tests/lab-02/validation.unit.test.ts` | PASS |
+| UNIT-04 | Unit | BR-07 | Summary validation rejects < 5 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | PASS |
+| UNIT-05 | Unit | BR-07 | Summary validation rejects > 200 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | PASS |
+| UNIT-06 | Unit | BR-08 | Description validation rejects < 10 chars after trim | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | PASS |
+| UNIT-07 | Unit | BR-08 | Description validation rejects > 3000 chars | Throws/returns validation error | `server/tests/lab-02/validation.unit.test.ts` | PASS |
 | UNIT-08 | Unit | BR-22 | Filename sanitizer produces UUID-prefixed safe filename | Output matches `^[a-f0-9-]{36}-.+$` | `server/tests/lab-02/attachment.unit.test.ts` | PASS |
 | UNIT-09 | Unit | BR-22 | Filename sanitizer preserves original filename in metadata | `originalFilename` unchanged | `server/tests/lab-02/attachment.unit.test.ts` | PASS |
 
@@ -249,6 +249,11 @@ npm run test:lab-02
 | UI-08 | PASS | MyTickets displays friendly empty state when user has 0 tickets |
 | UI-09 | PASS | MyTickets displays no-results state when search/filters match 0 tickets |
 | UI-10 | PASS | MyTickets Clear Filters button appears only when filters are active |
+| UNIT-03 | PASS | Summary trimming removes leading and trailing whitespace |
+| UNIT-04 | PASS | Summary validation rejects less than 5 characters |
+| UNIT-05 | PASS | Summary validation rejects more than 200 characters |
+| UNIT-06 | PASS | Description validation rejects less than 10 characters |
+| UNIT-07 | PASS | Description validation rejects more than 3000 characters |
 | UNIT-08 | PASS | Filename sanitizer produces UUID-prefixed safe filename |
 | UNIT-09 | PASS | Filename sanitizer preserves original filename and cleans unsafe characters |
 | API-15 | PASS | GET /api/tickets/:ticketNumber returns 403 when accessed by non-owner |
