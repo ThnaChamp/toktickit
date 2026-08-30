@@ -96,11 +96,10 @@ export default function RequesterSelectionPage() {
                 value={selectedId}
                 onChange={(e) => setSelectedId(Number(e.target.value))}
                 required
-                className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#006B3C]"
                 style={{
                   borderColor: "#D1E0D8",
                   color: "#1A2E22",
-                  focusRingColor: "#006B3C",
                 }}
               >
                 <option value="">— Select a requester —</option>

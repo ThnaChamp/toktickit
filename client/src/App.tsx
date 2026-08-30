@@ -3,7 +3,7 @@ import { RequesterProvider, useRequester } from "./contexts/RequesterContext";
 import NavBar from "./components/NavBar";
 import RequesterSelectionPage from "./pages/RequesterSelectionPage";
 import CreateTicketPage from "./pages/CreateTicketPage";
-import PlaceholderPage from "./pages/PlaceholderPage";
+import MyTicketsPage from "./pages/MyTicketsPage";
 
 // ─── Guard: redirect to /select-requester if no requester selected (FR-14) ───
 
@@ -30,7 +30,7 @@ function AppShell() {
           {/* Guarded routes */}
           <Route path="/my-tickets" element={
             <GuardedRoute>
-              <PlaceholderPage title="My Tickets" />
+              <MyTicketsPage />
             </GuardedRoute>
           } />
           <Route path="/create-ticket" element={
